@@ -1,0 +1,94 @@
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+/*
+// RMQ and RAQ
+using S = ll;
+S op(S a, S b) { return min(a,b); }
+S e() { return inf; }
+using F = ll;
+S mapping(F f, S x) { return f + x; }
+F composition(F f, F g) { return f + g; }
+F id() { return 0; }
+// RSQ and RAQ
+struct S{
+    long long value;
+    int size;
+};
+using F = long long;
+S op(S a, S b){ return {a.value+b.value, a.size+b.size}; }
+S e(){ return {0, 0}; }
+S mapping(F f, S x){ return {x.value + f*x.size, x.size}; }
+F composition(F f, F g){ return f+g; }
+F id(){ return 0; }
+lazy_segtree<S, op, e, F, mapping, composition, id> seg(n);
+*/
+template<class S, S (*op)(S, S), S (*e)(), class F, S (*mapping)(F, S), F (*composition)(F, F), F (*id)()>
+struct lazy_segtree {
+   public:
+   lazy_segtree() : lazy_segtree(0) {}
+   explicit lazy_segtree(int n) : lazy_segtree(std::vector<S>(n, e())) {}
+   explicit lazy_segtree(const std::vector<S>& v) : _n(int(v.size())) {
+      size = 1;
+      while(size < _n) size *= 2;
+      d.assign(2 * size, e());
+      lz.assign(size, id());
+      for(int i = 0; i < _n; i++) d[size + i] = v[i];
+      for(int i = size - 1; i >= 1; i--) { update(i); }
+   }
+   void set(int p, S x) {
+      assert(0 <= p && p < _n);
+      p += size;
+      for(int i = log; i >= 1; i--) push(p >> i);
+      d[p] = x;
+      for(int i = 1; i <= log; i++) update(p >> i);
+   }
+   S get(int p) {
+      assert(0 <= p && p < _n);
+      p += size;
+      for(int i = log; i >= 1; i--) push(p >> i);
+      return d[p];
+   }
+   S prod(int l, int r) {
+      assert(0 <= l && l <= r && r <= _n);
+      if(l == r) return e();
+      l += size;
+      r += size;
+      S sml = e(), smr = e();
+      while(l < r) {
+         if(l & 1) sml = op(sml, d[l++]);
+         if(r & 1) smr = op(d[--r], smr);
+         l >>= 1;
+         r >>= 1;
+      }
+      return op(sml, smr);
+   }
+   void apply(int l, int r, F f) {
+      assert(0 <= l && l <= r && r <= _n);
+      if(l == r) return;
+      l += size;
+      r += size;
+      while(l < r) {
+         if(l & 1) all_apply(l++, f);
+         if(r & 1) all_apply(--r, f);
+         l >>= 1;
+         r >>= 1;
+      }
+   }
+
+   private:
+   int _n, size, log;
+   std::vector<S> d;
+   std::vector<F> lz;
+   void update(int k) { d[k] = op(d[2 * k], d[2 * k + 1]); }
+   void all_apply(int k, F f) {
+      d[k] = mapping(f, d[k]);
+      if(k < size) lz[k] = composition(f, lz[k]);
+   }
+   void push(int k) {
+      all_apply(2 * k, lz[k]);
+      all_apply(2 * k + 1, lz[k]);
+      lz[k] = id();
+   }
+};
