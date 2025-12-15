@@ -3,26 +3,29 @@ using namespace std;
 using ll = long long;
 
 struct UnionFind {
-    vector<ll> p, r;
-    int gn;
-    UnionFind(ll n = 0) : p(n, -1), r(n, 1), gn(n) {}
-    void merge(ll a, ll b) {
-        ll x = group(a), y = group(b);
-        if(x == y)
-            return;
-        gn--;
-        if(r[x] < r[y])
-            p[x] = y;
-        else {
-            p[y] = x;
-            if(r[x] == r[y])
-                r[x]++;
-        }
+    int sz;
+    vector<int> par, size_;
+
+    UnionFind(int node_size) : sz(node_size), par(sz), size_(sz, 1) {
+        iota(par.begin(), par.end(), 0);
     }
-    ll group(ll a) {
-        if(p[a] == -1)
-            return a;
-        return p[a] = group(p[a]);
+    int find(int x) {
+        if(par[x] == x)
+            return x;
+        else
+            return par[x] = find(par[x]);
     }
-    bool same(ll a, ll b) { return group(a) == group(b); }
+    bool unite(int x, int y) {
+        x = find(x), y = find(y);
+        if(x == y) return false;
+        if(size_[x] < size_[y]) swap(x, y);
+        par[y] = x;
+        size_[x] += size_[y];
+        return true;
+    }
+    int size(int x) {
+        x = find(x);
+        return size_[x];
+    }
+    bool same(int x, int y) { return find(x) == find(y); }
 };
