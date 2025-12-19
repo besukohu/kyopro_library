@@ -35,7 +35,7 @@ struct UnionFind_Monoid {
         x = find(x);
         return size_[x];
     }
-    S& get(int x) {
+    const S& get(int x) {
         x = find(x);
         return dat[x];
     }
