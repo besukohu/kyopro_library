@@ -7,17 +7,7 @@ ll op(ll a, ll b) { return a + b; }
 ll e() { return 0; }
 segtree<ll, op, e> seg(n);
 */
-unsigned int bit_ceil(unsigned int n) {
-    unsigned int x = 1;
-    while (x < (unsigned int)(n)) x *= 2;
-    return x;
-}
-int countr_zero(unsigned int n) { return __builtin_ctz(n); }
-constexpr int countr_zero_constexpr(unsigned int n) {
-    int x = 0;
-    while (!(n & (1 << x))) x++;
-    return x;
-}
+
 template <class S, S (*op)(S, S), S (*e)()>
 struct segtree {
    public:
@@ -78,7 +68,7 @@ struct segtree {
             l++;
         } while ((l & -l) != l);
         return _n;
-    }  // faa03f
+    }
 
     template <class F>
     int min_left(int r, F f) {
@@ -101,11 +91,23 @@ struct segtree {
             sm = op(d[r], sm);
         } while ((r & -r) != r);
         return 0;
-    }  // efa466
+    }
 
    private:
     int _n, size, log;
     vector<S> d;
 
     void update(int k) { d[k] = op(d[2 * k], d[2 * k + 1]); }
+
+    unsigned int bit_ceil(unsigned int n) {
+        unsigned int x = 1;
+        while (x < (unsigned int)(n)) x *= 2;
+        return x;
+    }
+    int countr_zero(unsigned int n) { return __builtin_ctz(n); }
+    constexpr int countr_zero_constexpr(unsigned int n) {
+        int x = 0;
+        while (!(n & (1 << x))) x++;
+        return x;
+    }
 };

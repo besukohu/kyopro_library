@@ -24,17 +24,7 @@ F composition(F f, F g){ return f+g; }
 F id(){ return 0; }
 lazy_segtree<S, op, e, F, mapping, composition, id> seg(n);
 */
-unsigned int bit_ceil(unsigned int n) {
-    unsigned int x = 1;
-    while (x < (unsigned int)(n)) x *= 2;
-    return x;
-}
-int countr_zero(unsigned int n) { return __builtin_ctz(n); }
-constexpr int countr_zero_constexpr(unsigned int n) {
-    int x = 0;
-    while (!(n & (1 << x))) x++;
-    return x;
-}
+
 template <class S, S (*op)(S, S), S (*e)(), class F, S (*mapping)(F, S), F (*composition)(F, F), F (*id)()>
 struct lazy_segtree {
    public:
@@ -79,6 +69,10 @@ struct lazy_segtree {
             r >>= 1;
         }
         return op(sml, smr);
+    }
+
+    S all_prod() {
+        return d[1];
     }
 
     void apply(int l, int r, F f) {
@@ -170,5 +164,17 @@ struct lazy_segtree {
         all_apply(2 * k, lz[k]);
         all_apply(2 * k + 1, lz[k]);
         lz[k] = id();
+    }
+
+    unsigned int bit_ceil(unsigned int n) {
+        unsigned int x = 1;
+        while (x < (unsigned int)(n)) x *= 2;
+        return x;
+    }
+    int countr_zero(unsigned int n) { return __builtin_ctz(n); }
+    constexpr int countr_zero_constexpr(unsigned int n) {
+        int x = 0;
+        while (!(n & (1 << x))) x++;
+        return x;
     }
 };
