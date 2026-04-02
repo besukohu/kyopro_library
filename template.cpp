@@ -78,11 +78,11 @@ input get_input() {
 }
 
 void put_input(ostream& os, const input& in) {
-    // os << in.a << endl;
+    // osを使おう
 }
 
 void put_output(ostream& os, const output& out) {
-    // os << out.a << endl;
+    // osを使おう
 }
 
 output solve(const input& in) {
