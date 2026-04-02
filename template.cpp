@@ -54,21 +54,16 @@ const ll INF = (1LL << 61);
 ll mod = 998244353;
 
 struct input {
-    ll n;
-    vector<ll> a, b;
-
     bool operator==(const input&) const = default;
 };
 
 struct output {
-    ll ans;
-
     bool operator==(const output&) const = default;
 };
 
 bool is_multi = false;
 
-bool run_test = true;
+bool run_test = false;
 const ll test_timelimit = 10000;
 
 input get_input() {
