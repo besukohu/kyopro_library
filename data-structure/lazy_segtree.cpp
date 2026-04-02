@@ -165,16 +165,4 @@ struct lazy_segtree {
         all_apply(2 * k + 1, lz[k]);
         lz[k] = id();
     }
-
-    unsigned int bit_ceil(unsigned int n) {
-        unsigned int x = 1;
-        while (x < (unsigned int)(n)) x *= 2;
-        return x;
-    }
-    int countr_zero(unsigned int n) { return __builtin_ctz(n); }
-    constexpr int countr_zero_constexpr(unsigned int n) {
-        int x = 0;
-        while (!(n & (1 << x))) x++;
-        return x;
-    }
 };

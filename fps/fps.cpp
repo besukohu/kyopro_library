@@ -1,4 +1,6 @@
 // https://github.com/drken1215/algorithm/blob/master/MathAlgebra/formal_power_series.cpp
+#include <bits/stdc++.h>
+using namespace std;
 
 template <class mint>
 struct FPS : vector<mint> {
