@@ -1,57 +1,13 @@
 #include <bits/stdc++.h>
 
-using namespace std;
-using ll = long long;
-using a2 = array<ll, 2>;
-using a3 = array<ll, 3>;
+#include "base.hpp"
 
-bool chmin(auto& a, const auto& b) { return a > b ? a = b, 1 : 0; }
-bool chmax(auto& a, const auto& b) { return a < b ? a = b, 1 : 0; }
-
-ll floor_div(ll a, ll b) { return a / b - (a % b != 0 && (a ^ b) < 0); }
-ll ceil_div(ll a, ll b) { return a / b + (a % b != 0 && (a ^ b) > 0); }
-ll floor_mod(ll a, ll b) { return a % b + (a % b != 0 && (a ^ b) < 0) * b; }
-
-std::mt19937 mt(time(0));
-class xor_shift_128 {
-   public:
-    typedef uint32_t result_type;
-    xor_shift_128(result_type seed = mt()) {
-        set_seed(seed);
-    }
-    void set_seed(result_type seed) {
-        a = seed = 1812433253 * (seed ^ (seed >> 30));
-        b = seed = 1812433253 * (seed ^ (seed >> 30)) + 1;
-        c = seed = 1812433253 * (seed ^ (seed >> 30)) + 2;
-        d = seed = 1812433253 * (seed ^ (seed >> 30)) + 3;
-    }
-    result_type gen() {
-        result_type t = (a ^ (a << 11));
-        a = b;
-        b = c;
-        c = d;
-        return d = (d ^ (d >> 19)) ^ (t ^ (t >> 8));
-    }
-    result_type operator()() {
-        return gen();
-    }
-    result_type gen_range(result_type min_inclusive, result_type max_exclusive) {
-        result_type diff = max_exclusive - min_inclusive;
-        return min_inclusive + gen() % diff;
-    }
-
-    static constexpr result_type max() { return numeric_limits<result_type>::max(); }
-    static constexpr result_type min() { return numeric_limits<result_type>::min(); }
-
-   private:
-    result_type a, b, c, d;
-};
-xor_shift_128 xorrand;
 ifstream inst;
 ofstream outst;
 
-const ll INF = (1LL << 61);
-ll mod = 998244353;
+namespace random_test {
+bool run_test = false;
+const ll test_timelimit = 10000;
 
 struct input {
     bool operator==(const input&) const = default;
@@ -61,22 +17,6 @@ struct output {
     bool operator==(const output&) const = default;
 };
 
-bool is_multi = false;
-
-bool run_test = false;
-const ll test_timelimit = 10000;
-
-input get_input() {
-    optional<input> in;
-
-    // TODO
-    {
-    }
-
-    assert(in);
-    return *in;
-}
-
 void put_input(ostream& os, const input& in) {
     // osを使おう
 }
@@ -85,7 +25,7 @@ void put_output(ostream& os, const output& out) {
     // osを使おう
 }
 
-output solve(const input& in) {
+output solve_debug(const input& in) {
     optional<output> out;
 
     // TODO
@@ -96,7 +36,7 @@ output solve(const input& in) {
     return *out;
 }
 
-output naive(const input& in) {
+output naive_debug(const input& in) {
     optional<output> out;
 
     // TODO
@@ -131,6 +71,19 @@ bool compare_output(const input& in, const output& out_solve, const output& out_
     }
     return true;
 }
+}  // namespace random_test
+
+ll mod = 998244353;
+
+bool is_multi = false;
+bool is_interactive = false;
+
+void solve() {
+    // ランダムテスト時には以下に実装置き換え
+    // auto in = debug::read_input();
+    // auto out = debug::solve_debug(in);
+    // debug::put_output(cout, out);
+}
 
 int main(int argc, char** argv) {
     ios::sync_with_stdio(false);
@@ -144,6 +97,7 @@ int main(int argc, char** argv) {
         cout.rdbuf(outst.rdbuf());
     }
 
+    using namespace random_test;
     if (run_test) {
         auto starttime = chrono::system_clock::now();
 
@@ -157,28 +111,29 @@ int main(int argc, char** argv) {
             xorrand.set_seed(seed);
             auto in = gen();
 
-            auto out_solve = solve(in);
-            auto out_naive = naive(in);
+            auto out_solve = solve_debug(in);
+            auto out_naive = naive_debug(in);
 
             if (!compare_output(in, out_solve, out_naive)) {
                 cerr << "seed = " << seed << endl;
-                return 0;
+                return 1;
             }
         }
         cerr << "pass" << endl;
         cerr << "turn = " << turn << endl;
-        return 1;
+        return 0;
     }
 
+    if (is_interactive) {
+        cout << unitbuf;
+    }
     ll tests = 1;
     if (is_multi) {
         cin >> tests;
     }
 
     while (tests--) {
-        auto in = get_input();
-        auto out = solve(in);
-        put_output(cout, out);
+        solve();
     }
 
     return 0;
