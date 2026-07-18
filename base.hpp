@@ -1,6 +1,8 @@
 #pragma once
 #include <bits/stdc++.h>
 
+#include <cassert>
+
 using namespace std;
 using ll = long long;
 using ld = long double;
@@ -12,6 +14,12 @@ using i4 = array<ll, 4>;
 using f2 = array<ld, 2>;
 using f3 = array<ld, 3>;
 using f4 = array<ld, 4>;
+
+template <class T>
+using min_pq = priority_queue<T, vector<T>, greater<T>>;
+
+template <class T>
+using max_pq = priority_queue<T, vector<T>, less<T>>;
 
 const ll INF = (1LL << 61);
 
@@ -45,8 +53,9 @@ class xor_shift_128 {
     result_type operator()() {
         return gen();
     }
-    result_type gen_range(result_type min_inclusive, result_type max_exclusive) {
-        result_type diff = max_exclusive - min_inclusive;
+    ll gen_range(ll min_inclusive, ll max_exclusive) {
+        ll diff = max_exclusive - min_inclusive;
+        assert(diff);
         return min_inclusive + gen() % diff;
     }
 
@@ -57,6 +66,18 @@ class xor_shift_128 {
     result_type a, b, c, d;
 };
 xor_shift_128 xorrand;
+
+template <class T, size_t N>
+istream& operator>>(istream& is, array<T, N>& a) {
+    for (auto& x : a) is >> x;
+    return is;
+}
+template <class T, size_t N>
+ostream& operator<<(ostream& os, const array<T, N>& a) {
+    for (size_t i = 0; i < N; i++)
+        os << (i ? " " : "") << a[i];
+    return os;
+}
 
 template <class T>
 istream& operator>>(istream& is, vector<T>& v) {
@@ -73,18 +94,6 @@ template <class T>
 ostream& operator<<(ostream& os, const vector<vector<T>>& vv) {
     for (int i = 0; i < (int)vv.size(); i++)
         os << (i ? "\n" : "") << vv[i];
-    return os;
-}
-
-template <class T, size_t N>
-istream& operator>>(istream& is, array<T, N>& a) {
-    for (auto& x : a) is >> x;
-    return is;
-}
-template <class T, size_t N>
-ostream& operator<<(ostream& os, const array<T, N>& a) {
-    for (size_t i = 0; i < N; i++)
-        os << (i ? " " : "") << a[i];
     return os;
 }
 

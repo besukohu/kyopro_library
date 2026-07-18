@@ -19,7 +19,7 @@ struct BIT {
     ll sum(ll l, ll r) {  // sum of A[l, r)
         return sum(r) - sum(l);
     }
-    /// sum[0, idx) >= x なる最小の idx(sum[0, n) < x なら n+1)
+    // sum[0, idx) >= x なる最小の idx(sum[0, n) < x なら n+1)
     ll sum_lower_bound(ll x) {
         if (x <= 0)
             return 0;

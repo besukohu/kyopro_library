@@ -17,6 +17,17 @@ struct output {
     bool operator==(const output&) const = default;
 };
 
+input read_input() {
+    optional<input> in;
+
+    // TODO
+    {
+    }
+
+    assert(in);
+    return *in;
+}
+
 void put_input(ostream& os, const input& in) {
     // osを使おう
 }
@@ -80,9 +91,9 @@ bool is_interactive = false;
 
 void solve() {
     // ランダムテスト時には以下に実装置き換え
-    // auto in = debug::read_input();
-    // auto out = debug::solve_debug(in);
-    // debug::put_output(cout, out);
+    // auto in = random_test::read_input();
+    // auto out = random_test::solve_debug(in);
+    // random_test::put_output(cout, out);
 }
 
 int main(int argc, char** argv) {

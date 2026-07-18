@@ -1,15 +1,9 @@
-#include <bits/stdc++.h>
+#pragma once
 
+#include "base.hpp"
 #include "data-structure/lazy_segtree.hpp"
 
-using namespace std;
-using ll = long long;
-using a2 = array<ll, 2>;
-
-namespace besukohu {
-const ll INF = (1LL << 61);
-
-using S = a2;
+using S = i2;
 S op(S a, S b) {
     if (a[0] == b[0])
         return S{a[0], a[1] + b[1]};
@@ -24,16 +18,13 @@ F id() { return 0; }
 
 struct area_of_union_of_rectangles {
    private:
-    using a3 = array<ll, 3>;
-    using a4 = array<ll, 4>;
-
    public:
     area_of_union_of_rectangles() {
     }
 
     // [h1,h2)*[w1,w2)の長方形を追加
     void add_rectangle(ll h1, ll w1, ll h2, ll w2) {
-        rects.push_back(a4{h1, w1, h2, w2});
+        rects.push_back(i4{h1, w1, h2, w2});
     }
 
     // 長方形領域の和集合の面積を返す
@@ -52,7 +43,7 @@ struct area_of_union_of_rectangles {
         hs.erase(unique(hs.begin(), hs.end()), hs.end());
         ws.erase(unique(ws.begin(), ws.end()), ws.end());
 
-        vector<vector<a3>> query(hs.size());
+        vector<vector<i3>> query(hs.size());
         for (auto& [h1, w1, h2, w2] : rects) {
             ll l = lower_bound(ws.begin(), ws.end(), w1) - ws.begin();
             ll r = lower_bound(ws.begin(), ws.end(), w2) - ws.begin();
@@ -62,7 +53,7 @@ struct area_of_union_of_rectangles {
             query[d].push_back({l, r, -1});
         }
 
-        lazy_segtree<S, op, e, F, mapping, composition, id> seg(vector<S>(ws.size(), a2{0, 0}));
+        lazy_segtree<S, op, e, F, mapping, composition, id> seg(vector<S>(ws.size(), i2{0, 0}));
         for (int i = 0; i + 1 < ws.size(); i++) {
             seg.set(i, {0, ws[i + 1] - ws[i]});
         }
@@ -89,6 +80,5 @@ struct area_of_union_of_rectangles {
     }
 
    private:
-    vector<a4> rects;
+    vector<i4> rects;
 };
-}  // namespace besukohu
